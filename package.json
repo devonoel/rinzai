@@ -1,0 +1,14 @@
+{
+  "name": "rinzai",
+  "version": "1.0.0",
+  "description": "Randomized todos",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Devon Noel de Tilly",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.15.2"
+  }
+}

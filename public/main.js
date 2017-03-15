@@ -36,7 +36,7 @@ var app = new Vue({
     },
 
     getRandom: function() {
-      this.result = "Result: " + this.todos[Math.floor(Math.random() * this.todos.length)];
+      this.result = "Result: " + this.todos[Math.floor(Math.random() * this.todos.length)].message;
     }
   }
 });

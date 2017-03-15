@@ -11,6 +11,10 @@ function start() {
     res.sendFile('index.html');
   });
 
+  app.get('/todos', function(req, res) {
+    res.json({ todos: ['Do the thing', 'Do the other thing'] });
+  });
+
   app.listen(port, function() {
     console.log(`Listening of port ${port}`);
   });

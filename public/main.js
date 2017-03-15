@@ -1,9 +1,20 @@
 var app = new Vue({
   el: '#todos',
   data: {
-    todos: ['Do thing', 'Do other thing'],
+    todos: [],
     newTodo: '',
     result: ''
+  },
+
+  mounted: function() {
+    var that = this;
+    axios.get('/todos')
+      .then(function(res) {
+        that.todos = res.data.todos;
+      })
+      .catch(function(err) {
+        console.log(err);
+      })
   },
 
   methods: {

@@ -6,6 +6,7 @@ let todos = [
   {id: 1, message: 'Do the thing', complete: false},
   {id: 2, message: 'Do the other thing', complete: false}
 ];
+let idCounter = 3;
 
 start();
 
@@ -24,8 +25,8 @@ function start() {
 
   app.post('/todos', function(req, res) {
     if (req.body.todo) {
-      todos.push({id: todos.length + 1, message: req.body.todo, complete: false});
-      console.log(todos);
+      todos.push({id: idCounter, message: req.body.todo, complete: false});
+      idCounter++;
       res.json({ todos: todos });
     } else {
       res.status(400).json({ message: 'Missing required field: todo'});
@@ -33,9 +34,7 @@ function start() {
   });
 
   app.put('/todos/:id', function(req, res) {
-    let t = todos.find(function(e) {
-      return e.id === parseInt(req.params.id)
-    });
+    let t = getTodo(req.params.id);
 
     if (t) {
       t.complete = req.body.complete;
@@ -46,10 +45,23 @@ function start() {
   });
 
   app.delete('/todos/:id', function(req, res) {
-    console.log(req.params);
+    let i = todos.indexOf(getTodo(req.params.id));
+
+    if (i > -1) {
+      todos.splice(i, 1);
+      res.json({ todos: todos });
+    } else {
+      res.status(404).json({ message: `Todo with id ${req.params.id} not found` });
+    }
   });
 
   app.listen(port, function() {
     console.log(`Listening of port ${port}`);
+  });
+}
+
+function getTodo(id) {
+  return todos.find(function(e) {
+    return e.id === parseInt(id);
   });
 }

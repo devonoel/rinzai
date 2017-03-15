@@ -44,7 +44,18 @@ var app = new Vue({
           complete: t.complete
         })
         .then(function(res) {
-          t = res.todo;
+          t = res.data.todo;
+        })
+        .catch(function(err) {
+          console.error(err);
+        });
+    },
+
+    remove: function(id) {
+      var that = this;
+      axios.delete('/todos/' + id)
+        .then(function(res) {
+          that.todos = res.data.todos;
         })
         .catch(function(err) {
           console.error(err);

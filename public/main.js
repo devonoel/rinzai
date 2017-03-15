@@ -13,15 +13,24 @@ var app = new Vue({
         that.todos = res.data.todos;
       })
       .catch(function(err) {
-        console.log(err);
+        console.error(err);
       })
   },
 
   methods: {
     add: function() {
+      var that = this;
       var e = this.newTodo;
       if (!e) return;
-      this.todos.push(e);
+      axios.post('/todos', {
+          todo: that.newTodo
+        })
+        .then(function(res) {
+          if (res.status === 200) that.todos = res.data.todos;
+        })
+        .catch(function(err) {
+          console.error(err);
+        });
     },
 
     getRandom: function() {

@@ -20,13 +20,15 @@ var app = new Vue({
   methods: {
     add: function() {
       var that = this;
-      var e = this.newTodo;
-      if (!e) return;
+      if (!this.newTodo) return;
       axios.post('/todos', {
-          todo: that.newTodo
+          todo: this.newTodo
         })
         .then(function(res) {
-          if (res.status === 200) that.todos = res.data.todos;
+          if (res.status === 200) {
+            that.todos = res.data.todos;
+            that.newTodo = '';
+          }
         })
         .catch(function(err) {
           console.error(err);

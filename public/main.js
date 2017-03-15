@@ -35,6 +35,22 @@ var app = new Vue({
         });
     },
 
+    complete: function(id) {
+      var t = this.todos.find(function(e) {
+        return e.id === parseInt(id)
+      });
+
+      axios.put('/todos/' + id, {
+          complete: t.complete
+        })
+        .then(function(res) {
+          t = res.todo;
+        })
+        .catch(function(err) {
+          console.error(err);
+        });
+    },
+
     getRandom: function() {
       this.result = "Result: " + this.todos[Math.floor(Math.random() * this.todos.length)].message;
     }

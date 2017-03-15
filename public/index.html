@@ -10,6 +10,7 @@
       <ul>
         <li v-for="todo in todos">
           {{ todo.message }}
+          <input type="checkbox" v-model="todo.complete" v-on:change="complete(todo.id)">
         </li>
       </ul>
 

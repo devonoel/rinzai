@@ -32,6 +32,23 @@ function start() {
     }
   });
 
+  app.put('/todos/:id', function(req, res) {
+    let t = todos.find(function(e) {
+      return e.id === parseInt(req.params.id)
+    });
+
+    if (t) {
+      t.complete = req.body.complete;
+      res.json({ todo: t });
+    } else {
+      res.status(404).json({ message: `Todo with id ${req.params.id} not found` });
+    }
+  });
+
+  app.delete('/todos/:id', function(req, res) {
+    console.log(req.params);
+  });
+
   app.listen(port, function() {
     console.log(`Listening of port ${port}`);
   });

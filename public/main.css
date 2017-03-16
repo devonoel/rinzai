@@ -16,9 +16,7 @@ body {
 }
 
 button {
-  border: 1px solid black;
   background-color: #fff;
-  padding: 5px 10px;
 }
 
 input, button {
@@ -51,7 +49,17 @@ input, button {
 }
 
 #todo-area button {
+  border: none;
   float: right;
+}
+
+#todo-area button:hover {
+  color: red;
+  cursor: pointer;
+}
+
+#todo-area button:focus {
+  outline-color: red;
 }
 
 #todo-area input[type=checkbox] {
@@ -71,5 +79,7 @@ input, button {
 
 #add-area button {
   width: 15%;
+  border: 1px solid black;
   border-left: none;
+  padding: 5px 10px;
 }

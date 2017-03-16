@@ -3,7 +3,8 @@ var app = new Vue({
   data: {
     todos: [],
     newTodo: '',
-    result: ''
+    result: '',
+    loaded: false
   },
 
   mounted: function() {
@@ -11,6 +12,7 @@ var app = new Vue({
     axios.get('/todos')
       .then(function(res) {
         that.todos = res.data.todos;
+        that.loaded = true;
       })
       .catch(function(err) {
         console.error(err);

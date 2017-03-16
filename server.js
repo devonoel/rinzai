@@ -4,9 +4,10 @@ const app = express();
 const port = process.env.RINZAI_PORT || 4567;
 let todos = [
   {id: 1, message: 'Do the thing', complete: false},
-  {id: 2, message: 'Do the other thing', complete: false}
+  {id: 2, message: 'Do the other thing', complete: false},
+  {id: 3, message: 'Do one more thing', complete: false},
 ];
-let idCounter = 3;
+let idCounter = 4;
 
 start();
 

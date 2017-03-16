@@ -6,21 +6,26 @@
   </head>
 
   <body>
-    <div id="todos">
-      <ul>
-        <li v-for="todo in todos">
-          {{ todo.message }}
-          <input type="checkbox" v-model="todo.complete" v-on:change="complete(todo.id)">
-          <button v-on:click="remove(todo.id)">Remove</button>
-        </li>
-      </ul>
+    <div id="todos" v-cloak v-bind:class="{ hidden: !loaded }">
+      <div id="todo-area">
+        <ul>
+          <li v-for="todo in todos">
+            <input type="checkbox" v-model="todo.complete" v-on:change="complete(todo.id)">
+            <span class="todo-text">{{ todo.message }}</span>
+            <button v-on:click="remove(todo.id)">X</button>
+          </li>
+        </ul>
+      </div>
 
-      <input type="text" v-model="newTodo" @keyup.enter="add">
-      <button v-on:click="add">Add</button>
+      <div id="add-area">
+        <input type="text" v-model="newTodo" @keyup.enter="add">
+        <button v-on:click="add">Add</button>
+        <button v-on:click="getRandom">Random</button>
+      </div>
 
-      <button v-on:click="getRandom">Random</button>
-
-      <p>{{ result }}</p>
+      <div id="result-area">
+        <p>{{ result }}</p>
+      </div>
     </div>
 
     <script src="https://unpkg.com/vue@2.2.4/dist/vue.min.js"></script>

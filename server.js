@@ -2,12 +2,12 @@ const express = require('express');
 const bp = require('body-parser');
 const app = express();
 const port = process.env.RINZAI_PORT || 4567;
-let todos = [
-  {id: 1, message: 'Do the thing', complete: false},
-  {id: 2, message: 'Do the other thing', complete: false},
-  {id: 3, message: 'Do one more thing', complete: false},
-];
-let idCounter = 4;
+const Sequelize = require('sequelize');
+const seq = new Sequelize(process.env.RINZAI_DSN);
+const Todo = seq.define('Todo', {
+  message: Sequelize.STRING,
+  complete: Sequelize.BOOLEAN
+});
 
 start();
 
@@ -21,39 +21,49 @@ function start() {
   });
 
   app.get('/todos', function(req, res) {
-    res.json({ todos: todos });
+    respondTodos(res);
   });
 
   app.post('/todos', function(req, res) {
     if (req.body.todo) {
-      todos.push({id: idCounter, message: req.body.todo, complete: false});
-      idCounter++;
-      res.json({ todos: todos });
+      Todo.create({
+        message: req.body.todo,
+        complete: false
+      }).then(function(todo) {
+        res.json({ todo: todo });
+      }).catch(function(err) {
+        res.status(500).json({ message: 'Server error' });
+      });
     } else {
       res.status(400).json({ message: 'Missing required field: todo'});
     }
   });
 
   app.put('/todos/:id', function(req, res) {
-    let t = getTodo(req.params.id);
-
-    if (t) {
-      t.complete = req.body.complete;
-      res.json({ todo: t });
-    } else {
-      res.status(404).json({ message: `Todo with id ${req.params.id} not found` });
-    }
+    Todo.update({ complete: req.body.complete },
+      { where: { id: req.params.id } })
+    .then(function(result) {
+      if (result[0] > 0) {
+        respondTodos(res);
+      } else {
+        res.status(404).json({ message: `Todo with id ${req.params.id} not found` });
+      }
+    }).catch(function(err) {
+      res.status(500).json({ message: 'Server error' });
+    });
   });
 
   app.delete('/todos/:id', function(req, res) {
-    let i = todos.indexOf(getTodo(req.params.id));
-
-    if (i > -1) {
-      todos.splice(i, 1);
-      res.json({ todos: todos });
-    } else {
-      res.status(404).json({ message: `Todo with id ${req.params.id} not found` });
-    }
+    Todo.destroy({ where: { id: req.params.id } })
+    .then(function(result) {
+      if (result > 0) {
+        respondTodos(res);
+      } else {
+        res.status(404).json({ message: `Todo with id ${req.params.id} not found` });
+      }
+    }).catch(function(err) {
+      res.status(500).json({ message: 'Server error' });
+    });
   });
 
   app.listen(port, function() {
@@ -61,8 +71,11 @@ function start() {
   });
 }
 
-function getTodo(id) {
-  return todos.find(function(e) {
-    return e.id === parseInt(id);
+function respondTodos(res) {
+  Todo.findAll().then(function(todos) {
+    res.json({ todos: todos.map(function(e) { return e.dataValues }) });
+  }).catch(function(err) {
+    res.status(500).json({ message: 'Server error' });
   });
 }
+

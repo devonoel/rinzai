@@ -28,7 +28,7 @@ var app = new Vue({
         })
         .then(function(res) {
           if (res.status === 200) {
-            that.todos = res.data.todos;
+            that.todos.push(res.data.todo);
             that.newTodo = '';
           }
         })
